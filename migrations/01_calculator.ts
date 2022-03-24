@@ -1,4 +1,4 @@
-import storage from "../storage/example";
+import storage from "../storage/calculator";
 import { TezosToolkit } from "@taquito/taquito";
 import config from "../config";
 import { migrate } from "../scripts/commands/migrate/utils";
@@ -8,9 +8,9 @@ module.exports = async (tezos: TezosToolkit, network: NetworkLiteral) => {
   const contractAddress: TezosAddress = await migrate(
     tezos,
     config.outputDirectory,
-    "example",
+    "calculator",
     storage,
     network
   );
-  console.log(`Example contract address: ${contractAddress}`);
+  console.log(`Calculator contract address: ${contractAddress}`);
 };
