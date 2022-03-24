@@ -1,5 +1,8 @@
 #include "../partial/types.ligo"
 #include "../partial/plus.ligo"
+#include "../partial/minus.ligo"
+#include "../partial/mul.ligo"
+#include "../partial/div.ligo"
 #include "../partial/set.ligo"
 
 function main(
@@ -8,5 +11,8 @@ function main(
                         : return_t is
   case action of
   | Plus(params)           -> plus(params, s)
+  | Minus(params)          -> minus(params, s)
+  | Mul(params)            -> mul(params, s)
+  | Div(params)            -> div(params, s)
   | Set(params)            -> set_display_value(params, s)
   end
