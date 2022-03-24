@@ -19,6 +19,7 @@ type parameter_t              is
 | Minus                         of binary_operation_param_t
 | Mul                           of binary_operation_param_t
 | Div                           of binary_operation_param_t
+| Sqrt                          of operation_argument_t
 | Set                           of int
 
 [@inline] const no_operations : list(operation) = nil;
