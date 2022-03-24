@@ -1,10 +1,7 @@
-import BigNumber from 'bignumber.js';
-
-import { Tezos, signerAlice, signerBob } from "./utils/cli";
+import { Tezos, signerAlice } from "./utils/cli";
 import { migrate } from '../scripts/helpers';
-const { rejects, strictEqual, notStrictEqual } = require("assert");
-
-const { alice } = require("../scripts/sandbox/accounts");
+import { UnitValue } from '@taquito/taquito';
+import { strictEqual } from 'assert';
 
 describe("Calculator test", function () {
   let contract;
@@ -37,16 +34,16 @@ describe("Calculator test", function () {
 
   describe("Testing entrypoint: Plus", function () {
     it("Should add two Keyboard_value values", async function () {
-      const op = await contract.methods.plus({"keyboard_value": new BigNumber(-42)}, {"keyboard_value": new BigNumber(58)}).send();
+      const op = await contract.methods.plus("keyboard_value", -42, "keyboard_value", 58).send();
       await op.confirmation();
       const storage = await contract.storage();
       strictEqual(storage.display_value.toNumber(), 16);
     });
 
     it("Should add Display_value to Keyboard_value", async function () {
-      let batch = Tezos.wallet.batch([]);
-      batch = batch.withTransfer(contract.methods.set(8));
-      batch = batch.withTransfer(contract.methods.plus({"keyboard_value": new BigNumber(3)}, { display_value: {} }));
+      const batch = await Tezos.wallet.batch()
+        .withTransfer(contract.methods.set(8).toTransferParams())
+        .withTransfer(contract.methods.plus("keyboard_value", 3, "display_value", UnitValue).toTransferParams());
       const op = await batch.send();
       await op.confirmation();
       const storage = await contract.storage();
