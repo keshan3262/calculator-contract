@@ -1,10 +1,10 @@
 #include "../partial/types.ligo"
-#include "../partial/plus.ligo"
-#include "../partial/minus.ligo"
-#include "../partial/mul.ligo"
-#include "../partial/div.ligo"
-#include "../partial/sqrt.ligo"
-#include "../partial/set.ligo"
+#include "../partial/operations/plus.ligo"
+#include "../partial/operations/minus.ligo"
+#include "../partial/operations/mul.ligo"
+#include "../partial/operations/div.ligo"
+#include "../partial/operations/sqrt.ligo"
+#include "../partial/operations/set.ligo"
 
 function main(
   const action          : parameter_t;

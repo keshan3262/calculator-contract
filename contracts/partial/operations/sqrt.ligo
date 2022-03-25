@@ -1,5 +1,6 @@
-#include "./types.ligo"
-#include "./errors.ligo"
+#include "../errors.ligo"
+#include "../types.ligo"
+#include "../utils.ligo"
 
 function get_next_estimate(
   const argument : nat;
@@ -17,6 +18,7 @@ function sqrt(
   const params : operation_argument_t;
   var s        : storage_t)
                : return_t is block {
+  only_owner(s.owner);
   const argument : int = get_operand_value(params, s);
   if argument < 0
     then failwith(sqrt_of_negative)

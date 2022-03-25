@@ -1,3 +1,4 @@
+#include "./errors.ligo"
 #include "./types.ligo"
 
 [@inline] function get_operand_value(
@@ -8,3 +9,11 @@
   | Display_value -> s.display_value
   | Keyboard_value(value) -> value
   end;
+
+function only_owner(
+  const owner_address : address
+) : unit is block {
+  if Tezos.sender =/= owner_address
+    then failwith(not_owner)
+    else skip;
+} with unit
