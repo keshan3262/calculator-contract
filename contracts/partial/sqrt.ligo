@@ -1,7 +1,7 @@
 #include "./types.ligo"
 #include "./errors.ligo"
 
-[@inline] function get_next_estimate(
+function get_next_estimate(
   const argument : nat;
   const estimate : nat
 ) : nat is (estimate + argument / estimate) / 2n;
@@ -24,19 +24,5 @@ function sqrt(
   
   if argument = 0 or argument = 1
     then s.display_value := argument
-    else block {
-      const argument_bytes : bytes = Bytes.pack(argument);
-      // Length of bytes after 0500 prefix
-      const pure_argument_bytes_length : nat = abs(Bytes.length(argument_bytes) - 2n);
-      // 2 ** (number_bytes_count * 4)
-      const cunning_initial_sqrt_estimate : nat = Bitwise.shift_left(
-        1n,
-        pure_argument_bytes_length * 4n
-      );
-      const stupid_initial_sqrt_estimate : nat = abs(argument / 2);
-      const initial_sqrt_estimate = if stupid_initial_sqrt_estimate < cunning_initial_sqrt_estimate
-        then stupid_initial_sqrt_estimate
-        else cunning_initial_sqrt_estimate;
-      s.display_value := int(sqrt_iteration(abs(argument), initial_sqrt_estimate));
-    };
+    else s.display_value := int(sqrt_iteration(abs(argument), abs(argument / 2)));
 } with (no_operations, s)

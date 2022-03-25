@@ -226,5 +226,25 @@ describe("Calculator test", function () {
         '53274225820509157'
       )
     );
+
+    it(
+      "Should return 8 for 64",
+      async () => operatorTestcase(
+        contract,
+        "sqrt",
+        [{ type: "keyboard_value", value: 64 }],
+        8
+      )
+    );
+
+    it(
+      "Should return 5 for 32",
+      async () => operatorTestcase(
+        contract,
+        "sqrt",
+        [{ type: "keyboard_value", value: 32 }],
+        5
+      )
+    );
   });
 });
