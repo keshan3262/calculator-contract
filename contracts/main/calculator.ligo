@@ -1,4 +1,7 @@
 #include "../partial/types.ligo"
+#include "../partial/mem_operations/mem_plus.ligo"
+#include "../partial/mem_operations/mem_minus.ligo"
+#include "../partial/mem_operations/mem_clear.ligo"
 #include "../partial/operations/plus.ligo"
 #include "../partial/operations/minus.ligo"
 #include "../partial/operations/mul.ligo"
@@ -17,4 +20,7 @@ function main(
   | Div(params)            -> div(params, s)
   | Sqrt(params)           -> sqrt(params, s)
   | Set(params)            -> set_display_value(params, s)
+  | Mem_plus(params)       -> mem_plus(params, s)
+  | Mem_minus(params)      -> mem_minus(params, s)
+  | Mem_clear              -> mem_clear(s)
   end

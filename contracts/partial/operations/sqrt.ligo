@@ -4,15 +4,17 @@
 
 function get_next_estimate(
   const argument : nat;
-  const estimate : nat
-) : nat is (estimate + argument / estimate) / 2n;
+  const estimate : nat)
+                 : nat is
+  (estimate + argument / estimate) / 2n;
 
 recursive function sqrt_iteration(
   const argument : nat;
-  const estimate : nat
-) : nat is if get_next_estimate(argument, estimate) >= estimate
-  then estimate
-  else sqrt_iteration(argument, get_next_estimate(argument, estimate));
+  const estimate : nat)
+                 : nat is
+  if get_next_estimate(argument, estimate) >= estimate
+    then estimate
+    else sqrt_iteration(argument, get_next_estimate(argument, estimate));
 
 function sqrt(
   const params : operation_argument_t;
