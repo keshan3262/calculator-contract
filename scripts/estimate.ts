@@ -1,3 +1,4 @@
+// A code example for estimating entrypoints performance
 import { initTezos } from "../utils/helpers";
 import { michelson as contractCode } from "../build/calculator.json";
 import { alice } from "./sandbox/accounts";
