@@ -27,7 +27,7 @@ jobs:
       - name: Install modules
         run: yarn install
       - name: Compile contracts for tests
-        run: yarn compile-for-test
+        run: yarn compile
       - name: Start sandbox and wait for initialization
         run: yarn start-sandbox && sleep 10s
       - name: Test the contracts
