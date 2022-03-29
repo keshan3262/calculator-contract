@@ -1,3 +1,4 @@
-const div_by_zero      : string = "div-by-zero";
-const sqrt_of_negative : string = "sqrt-of-negative";
-const not_owner        : string = "not-owner";
+module Calculator is {
+  const value_negative  : string = "Calculator/value-negative";
+  const not_owner       : string = "Calculator/not-owner";
+}

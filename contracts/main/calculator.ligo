@@ -14,13 +14,13 @@ function main(
   const s               : storage_t)
                         : return_t is
   case action of
-  | Plus(params)           -> plus(params, s)
-  | Minus(params)          -> minus(params, s)
-  | Mul(params)            -> mul(params, s)
-  | Div(params)            -> div(params, s)
-  | Sqrt(params)           -> sqrt(params, s)
-  | Set(params)            -> set_display_value(params, s)
-  | Mem_plus(params)       -> mem_plus(params, s)
-  | Mem_minus(params)      -> mem_minus(params, s)
-  | Mem_clear              -> mem_clear(s)
+  | Plus(params)      -> plus(params, s)
+  | Minus(params)     -> minus(params, s)
+  | Mul(params)       -> mul(params, s)
+  | Div(params)       -> div(params, s)
+  | Sqrt(params)      -> sqrt(params, s)
+  | Set(params)       -> set_display_value(params, s)
+  | Mem_plus(params)  -> mem_plus(params, s)
+  | Mem_minus(params) -> mem_minus(params, s)
+  | Mem_clear(_)      -> mem_clear(s)
   end

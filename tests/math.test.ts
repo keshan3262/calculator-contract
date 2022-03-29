@@ -139,22 +139,6 @@ describe("Calculator test", function () {
   });
 
   describe("Testing entrypoint: Div", function () {
-    it("Should throw div-by-zero error for zero divisor from Keyboard_value", async () => mathOperatorTestcase(
-      aliceContract,
-      "div",
-      [{ type: "keyboard_value", value: 1 }, { type: "keyboard_value", value: 0 }],
-      { error: "div-by-zero" }
-    ));
-
-    it("Should throw div-by-zero error for zero divisor from Display_value", async () => mathOperatorTestcase(
-      aliceContract,
-      "div",
-      [{ type: "keyboard_value", value: 1 }, { type: "display_value" }],
-      { error: "div-by-zero" },
-      Tezos,
-      0
-    ));
-
     it("Should divide zero by non-zero value", async () => mathOperatorTestcase(
       aliceContract,
       "div",
@@ -200,22 +184,22 @@ describe("Calculator test", function () {
 
   describe("Testing entrypoint: Sqrt", function () {
     it(
-      "Should throw sqrt-of-negative error for negative Keyboard_value",
+      "Should throw Calculator/value-negative error for negative Keyboard_value",
       async () => mathOperatorTestcase(
         aliceContract,
         "sqrt",
         [{ type: "keyboard_value", value: -1 }],
-        { error: "sqrt-of-negative" }
+        { error: "Calculator/value-negative" }
       )
     );
 
     it(
-      "Should throw sqrt-of-negative error for negative Display_value",
+      "Should throw Calculator/value-negative error for negative Display_value",
       async () => mathOperatorTestcase(
         aliceContract,
         "sqrt",
         [{ type: "display_value" }],
-        { error: "sqrt-of-negative" },
+        { error: "Calculator/value-negative" },
         Tezos,
         -1,
         0
@@ -223,12 +207,12 @@ describe("Calculator test", function () {
     );
 
     it(
-      "Should throw sqrt-of-negative error for negative Memory_value",
+      "Should throw Calculator/value-negative error for negative Memory_value",
       async () => mathOperatorTestcase(
         aliceContract,
         "sqrt",
         [{ type: "memory_value" }],
-        { error: "sqrt-of-negative" },
+        { error: "Calculator/value-negative" },
         Tezos,
         0,
         -1

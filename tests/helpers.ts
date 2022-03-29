@@ -52,7 +52,10 @@ export const nonOwnerTestcase = async (
   contract: ContractAbstraction<ContractProvider>,
   methodName: string,
   args: any[]
-) => rejects(() => contract.methods[methodName](...args).send(), "non-owner");
+) => rejects(
+  () => contract.methods[methodName](...args).send(),
+  (e: Error) => e.message === "Calculator/not-owner"
+);
 
 const genericOperationTestcase = async (
   contract: ContractAbstraction<ContractProvider>,
