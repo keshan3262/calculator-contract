@@ -1,11 +1,10 @@
 #include "../types.ligo"
 #include "../utils.ligo"
 
-function set_display_value(
-  const params          : int;
+function clear_memory(
   var s                 : storage_t)
                         : return_t is
   block {
     only_owner(s.owner);
-    s.display_value := params;
+    s.memory_value := 0;
   } with (no_operations, s)

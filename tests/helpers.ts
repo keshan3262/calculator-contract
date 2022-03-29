@@ -69,12 +69,12 @@ const genericOperationTestcase = async (
 ) => {
   let batch = tezos.wallet.batch();
   if (initialDisplayValue !== undefined) {
-    batch = batch.withTransfer(contract.methods.set(initialDisplayValue).toTransferParams());
+    batch = batch.withTransfer(contract.methods.set_display(initialDisplayValue).toTransferParams());
   }
   if (initialMemValue !== undefined) {
     batch = batch
-      .withTransfer(contract.methods.mem_clear().toTransferParams())
-      .withTransfer(contract.methods.mem_plus("mem_plus_keyboard_value", initialMemValue).toTransferParams());
+      .withTransfer(contract.methods.clear_memory().toTransferParams())
+      .withTransfer(contract.methods.add_memory("add_memory_keyboard_value", initialMemValue).toTransferParams());
   }
   batch = batch.withTransfer(contract.methods[methodName](...args).toTransferParams());
   let result: OperationResult = '0';

@@ -1,26 +1,26 @@
 #include "../partial/types.ligo"
-#include "../partial/mem_operations/mem_plus.ligo"
-#include "../partial/mem_operations/mem_minus.ligo"
-#include "../partial/mem_operations/mem_clear.ligo"
-#include "../partial/operations/plus.ligo"
-#include "../partial/operations/minus.ligo"
-#include "../partial/operations/mul.ligo"
-#include "../partial/operations/div.ligo"
-#include "../partial/operations/sqrt.ligo"
-#include "../partial/operations/set.ligo"
+#include "../partial/mem_operations/add_memory.ligo"
+#include "../partial/mem_operations/negate_memory.ligo"
+#include "../partial/mem_operations/clear_memory.ligo"
+#include "../partial/operations/add.ligo"
+#include "../partial/operations/negate.ligo"
+#include "../partial/operations/multiply.ligo"
+#include "../partial/operations/divide.ligo"
+#include "../partial/operations/write_sqrt.ligo"
+#include "../partial/operations/set_display.ligo"
 
 function main(
   const action          : parameter_t;
   const s               : storage_t)
                         : return_t is
   case action of
-  | Plus(params)      -> plus(params, s)
-  | Minus(params)     -> minus(params, s)
-  | Mul(params)       -> mul(params, s)
-  | Div(params)       -> div(params, s)
-  | Sqrt(params)      -> sqrt(params, s)
-  | Set(params)       -> set_display_value(params, s)
-  | Mem_plus(params)  -> mem_plus(params, s)
-  | Mem_minus(params) -> mem_minus(params, s)
-  | Mem_clear(_)      -> mem_clear(s)
+  | Add(params)           -> add(params, s)
+  | Negate(params)        -> negate(params, s)
+  | Multiply(params)      -> multiply(params, s)
+  | Divide(params)        -> divide(params, s)
+  | Write_sqrt(params)    -> write_sqrt(params, s)
+  | Set_display(params)   -> set_display(params, s)
+  | Add_memory(params)    -> add_memory(params, s)
+  | Negate_memory(params) -> negate_memory(params, s)
+  | Clear_memory(_)       -> clear_memory(s)
   end

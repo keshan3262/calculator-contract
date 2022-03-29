@@ -1,7 +1,7 @@
 #include "../types.ligo"
 #include "../utils.ligo"
 
-function plus(
+function add(
   const param           : operand_pair_t;
   var s                 : storage_t)
                         : return_t is

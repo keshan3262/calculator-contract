@@ -4,17 +4,17 @@ type storage_t          is [@layout:comb] record [
   memory_value            : int;
 ]
 
-type mem_plus_argument_t  is
-| Mem_plus_display_value
-| Mem_plus_keyboard_value   of int
+type add_memory_argument_t    is
+| Add_memory_display_value    of unit
+| Add_memory_keyboard_value   of int
 
-type mem_minus_argument_t is
-| Mem_minus_display_value
-| Mem_minus_keyboard_value  of int
+type negate_memory_argument_t     is
+| Negate_memory_display_value   of unit
+| Negate_memory_keyboard_value  of int
 
 type operand_t          is
-| Display_value
-| Memory_value
+| Display_value           of unit
+| Memory_value            of unit
 | Keyboard_value          of int
 
 type operand_pair_t     is [@layout:comb] record [
@@ -25,14 +25,14 @@ type operand_pair_t     is [@layout:comb] record [
 type return_t           is list(operation) * storage_t
 
 type parameter_t        is
-| Plus                    of operand_pair_t
-| Minus                   of operand_pair_t
-| Mul                     of operand_pair_t
-| Div                     of operand_pair_t
-| Sqrt                    of operand_t
-| Mem_plus                of mem_plus_argument_t
-| Mem_minus               of mem_minus_argument_t
-| Mem_clear               of unit
-| Set                     of int
+| Add                     of operand_pair_t
+| Negate                  of operand_pair_t
+| Multiply                of operand_pair_t
+| Divide                  of operand_pair_t
+| Write_sqrt              of operand_t
+| Add_memory              of add_memory_argument_t
+| Negate_memory           of negate_memory_argument_t
+| Clear_memory            of unit
+| Set_display             of int
 
 [@inline] const no_operations : list(operation) = nil;

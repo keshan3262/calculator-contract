@@ -2,21 +2,21 @@
 #include "../types.ligo"
 #include "../utils.ligo"
 
-function get_next_estimate(
+function get_estimation(
   const argument        : nat;
-  const estimate        : nat)
+  const prev_estimation : nat)
                         : nat is
-  (estimate + argument / estimate) / 2n;
+  (prev_estimation + argument / prev_estimation) / 2n;
 
-recursive function sqrt_iteration(
+recursive function estimate_sqrt(
   const argument        : nat;
-  const estimate        : nat)
+  const prev_estimation : nat)
                         : nat is
-  if get_next_estimate(argument, estimate) >= estimate
-  then estimate
-  else sqrt_iteration(argument, get_next_estimate(argument, estimate));
+  if get_estimation(argument, prev_estimation) >= prev_estimation
+  then prev_estimation
+  else estimate_sqrt(argument, get_estimation(argument, prev_estimation));
 
-function sqrt(
+function write_sqrt(
   const params          : operand_t;
   var s                 : storage_t)
                         : return_t is
@@ -29,5 +29,5 @@ function sqrt(
 
     if argument = 0 or argument = 1
     then s.display_value := argument
-    else s.display_value := int(sqrt_iteration(abs(argument), abs(argument / 2)));
+    else s.display_value := int(estimate_sqrt(abs(argument), abs(argument / 2)));
   } with (no_operations, s)
