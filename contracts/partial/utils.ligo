@@ -11,8 +11,7 @@
   | Keyboard_value(value) -> value
   end;
 
-function only_owner(const owner_address : address) : unit is block {
-  if Tezos.sender =/= owner_address
-  then failwith(Calculator.not_owner)
-  else skip;
-} with unit
+function assert_owner(
+  const owner_address   : address)
+                        : unit is
+  assert_with_error(Tezos.sender = owner_address, Calculator.not_owner)

@@ -32,7 +32,7 @@ type parameter_t        is
 | Write_sqrt              of operand_t
 | Add_memory              of add_memory_argument_t
 | Negate_memory           of negate_memory_argument_t
-| Clear_memory            of unit
+| Reset_memory            of unit
 | Set_display             of int
 
 [@inline] const no_operations : list(operation) = nil;

@@ -21,11 +21,9 @@ function write_sqrt(
   var s                 : storage_t)
                         : return_t is
   block {
-    only_owner(s.owner);
+    assert_owner(s.owner);
     const argument : int = get_operand_value(params, s);
-    if argument < 0
-    then failwith(Calculator.value_negative)
-    else skip;
+    assert_some_with_error(is_nat(argument), Calculator.value_negative);
 
     if argument = 0 or argument = 1
     then s.display_value := argument

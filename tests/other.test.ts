@@ -6,7 +6,7 @@ import { UnitValue } from "@taquito/taquito";
 import { strictEqual } from "assert";
 import { memOperationTestcase, nonOwnerTestcase } from "./helpers";
 
-describe("Calculator test", function () {
+describe("Calculator other entrypoints test", function () {
   let aliceContract;
   let bobContract;
   let bobTezos;
@@ -104,15 +104,15 @@ describe("Calculator test", function () {
     );
   });
 
-  describe("Testing entrypoint: Clear_memory", () => {
+  describe("Testing entrypoint: Reset_memory", () => {
     it(
       "Should reset memory_value to zero",
-      async () => memOperationTestcase(aliceContract, "clear_memory", [], 0, 7)
+      async () => memOperationTestcase(aliceContract, "reset_memory", [], 0, 7)
     );
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "clear_memory", [UnitValue])
+      async () => nonOwnerTestcase(bobContract, "reset_memory", [UnitValue])
     );
   });
 });

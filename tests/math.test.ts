@@ -3,7 +3,7 @@ import { initTezos } from "../utils/helpers";
 import { Tezos, signerAlice } from "./utils/cli";
 import { mathOperatorTestcase, nonOwnerMathOperatorTestcase } from "./helpers";
 
-describe("Calculator test", function () {
+describe("Calculator math entrypoints test", function () {
   let aliceContract;
   let bobContract;
   let bobTezos;
@@ -226,6 +226,16 @@ describe("Calculator test", function () {
         "write_sqrt",
         [{ type: "keyboard_value", value: 0 }],
         0
+      )
+    );
+
+    it(
+      "Should return 1 for 1",
+      async () => mathOperatorTestcase(
+        aliceContract,
+        "write_sqrt",
+        [{ type: "keyboard_value", value: 1 }],
+        1
       )
     );
 

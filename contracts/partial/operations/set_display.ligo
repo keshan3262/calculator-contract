@@ -6,6 +6,6 @@ function set_display(
   var s                 : storage_t)
                         : return_t is
   block {
-    only_owner(s.owner);
+    assert_owner(s.owner);
     s.display_value := params;
   } with (no_operations, s)

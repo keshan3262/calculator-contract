@@ -1,4 +1,4 @@
-import { ContractAbstraction, ContractProvider, UnitValue } from "@taquito/taquito";
+import { ContractAbstraction, ContractProvider, TransferParams, UnitValue } from "@taquito/taquito";
 import { rejects, strictEqual } from "assert";
 import BigNumber from "bignumber.js";
 
@@ -46,7 +46,27 @@ const assertResultMatch = (expected: OperationResult, received: OperationResult)
   } else {
     strictEqual(new BigNumber(received).toFixed(), new BigNumber(expected).toFixed());
   }
-}
+};
+
+export const getSettingInitialValuesTransfersParams = (
+  contract: ContractAbstraction<ContractProvider>,
+  initialDisplayValue?: BigNumber.Value,
+  initialMemValue?: BigNumber.Value
+) => {
+  const result: TransferParams[] = [];
+
+  if (initialDisplayValue !== undefined) {
+    result.push(contract.methods.set_display(initialDisplayValue).toTransferParams());
+  }
+  if (initialMemValue !== undefined) {
+    result.push(
+      contract.methods.reset_memory().toTransferParams(),
+      contract.methods.add_memory("add_memory_keyboard_value", initialMemValue).toTransferParams()
+    );
+  }
+
+  return result;
+};
 
 export const nonOwnerTestcase = async (
   contract: ContractAbstraction<ContractProvider>,
@@ -68,14 +88,8 @@ const genericOperationTestcase = async (
   initialMemValue?: BigNumber.Value
 ) => {
   let batch = tezos.wallet.batch();
-  if (initialDisplayValue !== undefined) {
-    batch = batch.withTransfer(contract.methods.set_display(initialDisplayValue).toTransferParams());
-  }
-  if (initialMemValue !== undefined) {
-    batch = batch
-      .withTransfer(contract.methods.clear_memory().toTransferParams())
-      .withTransfer(contract.methods.add_memory("add_memory_keyboard_value", initialMemValue).toTransferParams());
-  }
+  getSettingInitialValuesTransfersParams(contract, initialDisplayValue, initialMemValue)
+    .forEach(transferParams => batch = batch.withTransfer(transferParams));
   batch = batch.withTransfer(contract.methods[methodName](...args).toTransferParams());
   let result: OperationResult = '0';
   try {
