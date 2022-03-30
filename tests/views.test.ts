@@ -4,6 +4,7 @@ import { migrate } from "../scripts/helpers";
 import { ContractAbstraction, ContractProvider } from "@taquito/taquito";
 import { strictEqual } from "assert";
 import { getSettingInitialValuesTransfersParams } from "./helpers";
+import { alice } from "../scripts/sandbox/accounts";
 
 describe("Calculator views test", function () {
   let contract;
@@ -35,8 +36,9 @@ describe("Calculator views test", function () {
       const op = await batch.send();
       await op.confirmation();
 
-      console.warn(contract.views, contract.entrypoints);
-      const result = await (contract as ContractAbstraction<ContractProvider>).views.get_display().read();
+      const result = await (contract as ContractAbstraction<ContractProvider>).contractViews.get_display().executeView({
+        viewCaller: alice.pkh
+      });
       strictEqual(result.toNumber(), 1);
     });
   });
