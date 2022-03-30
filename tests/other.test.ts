@@ -46,22 +46,22 @@ describe("Calculator other entrypoints test", function () {
 
   describe("Testing entrypoint: Add_memory", () => {
     it(
-      "Should increase memory_value by Add_memory_keyboard_value value",
+      "Should increase memory_value by 'memory_keyboard' value",
       async () => memOperationTestcase(
         aliceContract,
         "add_memory",
-        ["add_memory_keyboard_value", 4],
+        ["memory_keyboard", 4],
         9,
         5
       )
     );
 
     it(
-      "Should increase memory_value by display value",
+      "Should increase memory_value by 'display' value",
       async () => memOperationTestcase(
         aliceContract,
         "add_memory",
-        ["add_memory_display_value", UnitValue],
+        ["memory_display", UnitValue],
         12,
         9,
         3
@@ -70,28 +70,28 @@ describe("Calculator other entrypoints test", function () {
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "add_memory", ["add_memory_keyboard_value", 4])
+      async () => nonOwnerTestcase(bobContract, "add_memory", ["memory_keyboard", 4])
     );
   });
 
   describe("Testing entrypoint: Negate_memory", () => {
     it(
-      "Should decrease memory_value by Negate_memory_keyboard_value value",
+      "Should decrease memory_value by 'memory_keyboard' value",
       async () => memOperationTestcase(
         aliceContract,
         "negate_memory",
-        ["negate_memory_keyboard_value", 4],
+        ["memory_keyboard", 4],
         1,
         5
       )
     );
 
     it(
-      "Should decrease memory_value by display value",
+      "Should decrease memory_value by 'display' value",
       async () => memOperationTestcase(
         aliceContract,
         "negate_memory",
-        ["negate_memory_display_value"],
+        ["memory_display"],
         6,
         9,
         3
@@ -100,7 +100,7 @@ describe("Calculator other entrypoints test", function () {
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "negate_memory", ["negate_memory_keyboard_value", 4])
+      async () => nonOwnerTestcase(bobContract, "negate_memory", ["memory_keyboard", 4])
     );
   });
 

@@ -2,14 +2,14 @@
 #include "../utils.ligo"
 
 function negate_memory(
-  const params          : negate_memory_argument_t;
+  const params          : memory_arg_t;
   var s                 : storage_t)
                         : return_t is
   block {
     assert_owner(s.owner);
-    const operand : int = case params of
-    | Negate_memory_display_value         -> s.display_value
-    | Negate_memory_keyboard_value(value) -> value
+    const operand : int = case params.value of
+    | Memory_display(_)      -> s.display_value
+    | Memory_keyboard(value) -> value
     end;
     s.memory_value := s.memory_value - operand;
   } with (no_operations, s)

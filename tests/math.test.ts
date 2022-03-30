@@ -28,26 +28,26 @@ describe("Calculator math entrypoints test", function () {
   });
 
   describe("Testing entrypoint: Add", function () {
-    it("Should add two Keyboard_value values", async () => mathOperatorTestcase(
+    it("Should add two 'keyboard' values", async () => mathOperatorTestcase(
       aliceContract,
       "add",
-      [{ type: "keyboard_value", value: -42 }, { type: "keyboard_value", value: 58 }],
+      [{ type: "keyboard", value: -42 }, { type: "keyboard", value: 58 }],
       16
     ));
 
-    it("Should add Display_value to Keyboard_value", async () => mathOperatorTestcase(
+    it("Should add 'display' value to 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "add",
-      [{ type: "keyboard_value", value: 3 }, { type: "display_value" }],
+      [{ type: "keyboard", value: 3 }, { type: "display" }],
       11,
       Tezos,
       8
     ));
 
-    it("Should add Memory_value to Keyboard_value", async () => mathOperatorTestcase(
+    it("Should add 'memory' value to 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "add",
-      [{ type: "keyboard_value", value: 3 }, { type: "memory_value" }],
+      [{ type: "keyboard", value: 3 }, { type: "memory" }],
       12,
       Tezos,
       1,
@@ -59,32 +59,32 @@ describe("Calculator math entrypoints test", function () {
       async () => nonOwnerMathOperatorTestcase(
         bobContract,
         "add",
-        [{ type: "keyboard_value", value: -42 }, { type: "keyboard_value", value: 58 }]
+        [{ type: "keyboard", value: -42 }, { type: "keyboard", value: 58 }]
       )
     );
   });
 
   describe("Testing entrypoint: Negate", function () {
-    it("Should negate second Keyboard_value from thr first one", async () => mathOperatorTestcase(
+    it("Should negate second 'keyboard' value from thr first one", async () => mathOperatorTestcase(
       aliceContract,
       "negate",
-      [{ type: "keyboard_value", value: -42 }, { type: "keyboard_value", value: 58 }],
+      [{ type: "keyboard", value: -42 }, { type: "keyboard", value: 58 }],
       -100
     ));
 
-    it("Should negate Keyboard_value from Display_value", async () => mathOperatorTestcase(
+    it("Should negate 'keyboard' value from 'display' value", async () => mathOperatorTestcase(
       aliceContract,
       "negate",
-      [{ type: "display_value" }, { type: "keyboard_value", value: 3 }],
+      [{ type: "display" }, { type: "keyboard", value: 3 }],
       5,
       Tezos,
       8
     ));
 
-    it("Should negate Memory_value from Keyboard_value", async () => mathOperatorTestcase(
+    it("Should negate 'memory' value from 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "negate",
-      [{ type: "keyboard_value", value: 3 }, { type: "memory_value" }],
+      [{ type: "keyboard", value: 3 }, { type: "memory" }],
       -6,
       Tezos,
       1,
@@ -96,32 +96,32 @@ describe("Calculator math entrypoints test", function () {
       async () => nonOwnerMathOperatorTestcase(
         bobContract,
         "negate",
-        [{ type: "keyboard_value", value: -42 }, { type: "keyboard_value", value: 58 }]
+        [{ type: "keyboard", value: -42 }, { type: "keyboard", value: 58 }]
       )
     );
   });
 
   describe("Testing entrypoint: Multiply", function () {
-    it("Should multiply two Keyboard_value values", async () => mathOperatorTestcase(
+    it("Should multiply two 'keyboard' values", async () => mathOperatorTestcase(
       aliceContract,
       "multiply",
-      [{ type: "keyboard_value", value: -7 }, { type: "keyboard_value", value: 8 }],
+      [{ type: "keyboard", value: -7 }, { type: "keyboard", value: 8 }],
       -56
     ));
 
-    it("Should multiply Display_value by Keyboard_value", async () => mathOperatorTestcase(
+    it("Should multiply 'display' value by 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "multiply",
-      [{ type: "keyboard_value", value: 3 }, { type: "display_value" }],
+      [{ type: "keyboard", value: 3 }, { type: "display" }],
       24,
       Tezos,
       8
     ));
 
-    it("Should multiply Memory_value by Keyboard_value", async () => mathOperatorTestcase(
+    it("Should multiply 'memory' value by 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "multiply",
-      [{ type: "keyboard_value", value: 3 }, { type: "memory_value" }],
+      [{ type: "keyboard", value: 3 }, { type: "memory" }],
       27,
       Tezos,
       2,
@@ -133,7 +133,7 @@ describe("Calculator math entrypoints test", function () {
       async () => nonOwnerMathOperatorTestcase(
         bobContract,
         "multiply",
-        [{ type: "keyboard_value", value: -42 }, { type: "keyboard_value", value: 58 }]
+        [{ type: "keyboard", value: -42 }, { type: "keyboard", value: 58 }]
       )
     );
   });
@@ -142,30 +142,30 @@ describe("Calculator math entrypoints test", function () {
     it("Should divide zero by non-zero value", async () => mathOperatorTestcase(
       aliceContract,
       "divide",
-      [{ type: "keyboard_value", value: 0 }, { type: "keyboard_value", value: 1 }],
+      [{ type: "keyboard", value: 0 }, { type: "keyboard", value: 1 }],
       0
     ));
 
-    it("Should divide a Keyboard_value by another one", async () => mathOperatorTestcase(
+    it("Should divide a 'keyboard' value by another one", async () => mathOperatorTestcase(
       aliceContract,
       "divide",
-      [{ type: "keyboard_value", value: 17 }, { type: "keyboard_value", value: 6 }],
+      [{ type: "keyboard", value: 17 }, { type: "keyboard", value: 6 }],
       2
     ));
 
-    it("Should divide Display_value by Keyboard_value", async () => mathOperatorTestcase(
+    it("Should divide 'display' value by 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "divide",
-      [{ type: "display_value" }, { type: "keyboard_value", value: 4 }],
+      [{ type: "display" }, { type: "keyboard", value: 4 }],
       7,
       Tezos,
       28
     ));
 
-    it("Should divide Memory_value by Keyboard_value", async () => mathOperatorTestcase(
+    it("Should divide 'memory' value by 'keyboard' value", async () => mathOperatorTestcase(
       aliceContract,
       "divide",
-      [{ type: "memory_value" }, { type: "keyboard_value", value: 3 }],
+      [{ type: "memory" }, { type: "keyboard", value: 3 }],
       9,
       Tezos,
       2,
@@ -177,28 +177,28 @@ describe("Calculator math entrypoints test", function () {
       async () => nonOwnerMathOperatorTestcase(
         bobContract,
         "divide",
-        [{ type: "keyboard_value", value: -42 }, { type: "keyboard_value", value: 58 }]
+        [{ type: "keyboard", value: -42 }, { type: "keyboard", value: 58 }]
       )
     );
   });
 
   describe("Testing entrypoint: Write_sqrt", function () {
     it(
-      "Should throw Calculator/value-negative error for negative Keyboard_value",
+      "Should throw Calculator/value-negative error for negative 'keyboard' value",
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: -1 }],
+        [{ type: "keyboard", value: -1 }],
         { error: "Calculator/value-negative" }
       )
     );
 
     it(
-      "Should throw Calculator/value-negative error for negative Display_value",
+      "Should throw Calculator/value-negative error for negative 'display' value",
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "display_value" }],
+        [{ type: "display" }],
         { error: "Calculator/value-negative" },
         Tezos,
         -1,
@@ -207,11 +207,11 @@ describe("Calculator math entrypoints test", function () {
     );
 
     it(
-      "Should throw Calculator/value-negative error for negative Memory_value",
+      "Should throw Calculator/value-negative error for negative 'memory' value",
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "memory_value" }],
+        [{ type: "memory" }],
         { error: "Calculator/value-negative" },
         Tezos,
         0,
@@ -224,7 +224,7 @@ describe("Calculator math entrypoints test", function () {
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: 0 }],
+        [{ type: "keyboard", value: 0 }],
         0
       )
     );
@@ -234,17 +234,17 @@ describe("Calculator math entrypoints test", function () {
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: 1 }],
+        [{ type: "keyboard", value: 1 }],
         1
       )
     );
 
     it(
-      "Should calculate square root of Display_value",
+      "Should calculate square root of 'display' value",
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "display_value" }],
+        [{ type: "display" }],
         "94052897529346117",
         Tezos,
         "8845947533665681022193720685353968"
@@ -252,21 +252,21 @@ describe("Calculator math entrypoints test", function () {
     );
 
     it(
-      "Should calculate square root of Keyboard_value",
+      "Should calculate square root of 'keyboard' value",
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: "2838143136774604646417234884035774" }],
+        [{ type: "keyboard", value: "2838143136774604646417234884035774" }],
         "53274225820509157"
       )
     );
 
     it(
-      "Should calculate square root of Memory_value",
+      "Should calculate square root of 'memory' value",
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "memory_value" }],
+        [{ type: "memory" }],
         "982713752979381",
         Tezos,
         undefined,
@@ -279,7 +279,7 @@ describe("Calculator math entrypoints test", function () {
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: 64 }],
+        [{ type: "keyboard", value: 64 }],
         8
       )
     );
@@ -289,7 +289,7 @@ describe("Calculator math entrypoints test", function () {
       async () => mathOperatorTestcase(
         aliceContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: 32 }],
+        [{ type: "keyboard", value: 32 }],
         5
       )
     );
@@ -299,7 +299,7 @@ describe("Calculator math entrypoints test", function () {
       async () => nonOwnerMathOperatorTestcase(
         bobContract,
         "write_sqrt",
-        [{ type: "keyboard_value", value: -42 }]
+        [{ type: "keyboard", value: -42 }]
       )
     );
   });

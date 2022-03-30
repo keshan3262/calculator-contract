@@ -5,20 +5,20 @@ import BigNumber from "bignumber.js";
 import { Tezos } from "./utils/cli";
 
 interface MathOperationArgumentBase {
-  type: "keyboard_value" | "display_value" | "memory_value";
+  type: "keyboard" | "display" | "memory";
 }
 
 interface KeyboardValue extends MathOperationArgumentBase {
-  type: "keyboard_value";
+  type: "keyboard";
   value: BigNumber.Value;
 }
 
 interface DisplayValue extends MathOperationArgumentBase {
-  type: "display_value";
+  type: "display";
 }
 
 interface MemoryValue extends MathOperationArgumentBase {
-  type: "memory_value";
+  type: "memory";
 }
 
 type MathOperationArgument = KeyboardValue | DisplayValue | MemoryValue;
@@ -61,7 +61,7 @@ export const getSettingInitialValuesTransfersParams = (
   if (initialMemValue !== undefined) {
     result.push(
       contract.methods.reset_memory().toTransferParams(),
-      contract.methods.add_memory("add_memory_keyboard_value", initialMemValue).toTransferParams()
+      contract.methods.add_memory("memory_keyboard", initialMemValue).toTransferParams()
     );
   }
 
@@ -110,7 +110,7 @@ export const nonOwnerMathOperatorTestcase = (
 ) => nonOwnerTestcase(
   contract,
   methodName,
-  args.map(arg => [arg.type, arg.type === "keyboard_value" ? arg.value : UnitValue]).flat()
+  args.map(arg => [arg.type, arg.type === "keyboard" ? arg.value : UnitValue]).flat()
 );
 
 export const mathOperatorTestcase = async (
@@ -124,7 +124,7 @@ export const mathOperatorTestcase = async (
 ) => genericOperationTestcase(
   contract,
   methodName,
-  args.map(arg => [arg.type, arg.type === "keyboard_value" ? arg.value : UnitValue]).flat(),
+  args.map(arg => [arg.type, arg.type === "keyboard" ? arg.value : UnitValue]).flat(),
   expectedResult,
   storage => storage.display_value,
   tezos,

@@ -4,18 +4,19 @@ type storage_t          is [@layout:comb] record [
   memory_value            : int;
 ]
 
-type add_memory_argument_t    is
-| Add_memory_display_value    of unit
-| Add_memory_keyboard_value   of int
+type memory_arg_value_t is
+| Memory_display      of unit
+| Memory_keyboard     of int
 
-type negate_memory_argument_t     is
-| Negate_memory_display_value   of unit
-| Negate_memory_keyboard_value  of int
+(* Two entrypoints with same arg of union type cannot be added *)
+type memory_arg_t       is [@layout:comb] record [
+  value                   : memory_arg_value_t;
+]
 
 type operand_t          is
-| Display_value           of unit
-| Memory_value            of unit
-| Keyboard_value          of int
+| Display                 of unit
+| Memory                  of unit
+| Keyboard                of int
 
 type operand_pair_t     is [@layout:comb] record [
   operand1                : operand_t;
@@ -30,8 +31,8 @@ type parameter_t        is
 | Multiply                of operand_pair_t
 | Divide                  of operand_pair_t
 | Write_sqrt              of operand_t
-| Add_memory              of add_memory_argument_t
-| Negate_memory           of negate_memory_argument_t
+| Add_memory              of memory_arg_t
+| Negate_memory           of memory_arg_t
 | Reset_memory            of unit
 | Set_display             of int
 

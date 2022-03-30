@@ -18,7 +18,7 @@ import { alice } from "./sandbox/accounts";
   const contract = await operation.contract();
   console.log(`Contract address is ${contract.address}`);
   try {
-    const method = await contract.methods.add_memory("add_memory_keyboard_value", 4);
+    const method = await contract.methods.add_memory("memory_keyboard", 4);
     console.log(method.toTransferParams());
   } catch (e) {
     console.error(e);

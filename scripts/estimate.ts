@@ -24,7 +24,7 @@ import { alice } from "./sandbox/accounts";
     // @ts-ignore
     minimalFeePerStorageByteMutez
   } = await Tezos.estimate.transfer(
-    contract.methods.sqrt("keyboard_value", "2838143136774604646417234884035774")
+    contract.methods.sqrt("keyboard", "2838143136774604646417234884035774")
       .toTransferParams()
   );
 
