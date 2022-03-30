@@ -23,9 +23,9 @@ function write_sqrt(
   block {
     assert_owner(s.owner);
     const argument : int = get_operand_value(params, s);
-    assert_some_with_error(is_nat(argument), Calculator.value_negative);
+    const argument_nat = nat_or_error(argument, Calculator.value_negative);
 
-    if argument = 0 or argument = 1
+    if argument_nat = 0n or argument_nat = 1n
     then s.display_value := argument
     else s.display_value := int(estimate_sqrt(abs(argument), abs(argument / 2)));
   } with (no_operations, s)
