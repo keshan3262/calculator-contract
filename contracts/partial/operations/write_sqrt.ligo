@@ -17,12 +17,12 @@ recursive function estimate_sqrt(
   else estimate_sqrt(argument, get_estimation(argument, prev_estimation));
 
 function write_sqrt(
-  const params          : operand_t;
+  const params          : one_operand_t;
   var s                 : storage_t)
                         : return_t is
   block {
     assert_owner(s.owner);
-    const argument : int = get_operand_value(params, s);
+    const argument : int = get_operand_value(params.value, s);
     const argument_nat = nat_or_error(argument, Calculator.value_negative);
 
     if argument_nat = 0n or argument_nat = 1n

@@ -23,6 +23,11 @@ type operand_pair_t     is [@layout:comb] record [
   operand2                : operand_t;
 ]
 
+type one_operand_t      is [@layout:comb] record [
+  value                   : operand_t;
+  r                       : unit;
+]
+
 type return_t           is list(operation) * storage_t
 
 type parameter_t        is
@@ -30,7 +35,7 @@ type parameter_t        is
 | Negate                  of operand_pair_t
 | Multiply                of operand_pair_t
 | Divide                  of operand_pair_t
-| Write_sqrt              of operand_t
+| Write_sqrt              of one_operand_t
 | Add_memory              of memory_arg_t
 | Negate_memory           of memory_arg_t
 | Reset_memory            of unit

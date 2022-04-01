@@ -33,7 +33,7 @@ export const config = {
       },
     },
     testnet: {
-      host: "https://rpc.hangzhounet.teztnets.xyz",
+      host: "https://ithacanet.smartpy.io",
       port: 443,
       faucet: null,
     },
