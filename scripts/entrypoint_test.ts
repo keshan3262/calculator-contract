@@ -1,4 +1,5 @@
 // An example of code which can be used for debugging of test code using taquito module
+import { confirmOperation } from '../utils/confirmation';
 import { initTezos } from "../utils/helpers";
 import { michelson as contractCode } from "../build/calculator.json";
 import { alice } from "./sandbox/accounts";
@@ -14,7 +15,7 @@ import { alice } from "./sandbox/accounts";
     }).send();
 
     console.log("Waiting for confirmation...");
-    await operation.confirmation();
+    await confirmOperation(Tezos, operation.opHash);
 
     const contract = await operation.contract();
     console.log(`Contract address is ${contract.address}`);

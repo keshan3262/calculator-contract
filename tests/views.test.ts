@@ -5,6 +5,7 @@ import { ContractAbstraction, ContractProvider } from "@taquito/taquito";
 import { strictEqual } from "assert";
 import { getSettingInitialValuesTransfersParams } from "./helpers";
 import { alice } from "../scripts/sandbox/accounts";
+import { confirmOperation } from "../utils/confirmation";
 
 describe("Calculator views test", function () {
   let contract;
@@ -34,7 +35,7 @@ describe("Calculator views test", function () {
       getSettingInitialValuesTransfersParams(contract, 1, 2)
         .forEach(transferParams => batch = batch.withTransfer(transferParams));
       const op = await batch.send();
-      await op.confirmation();
+      await confirmOperation(Tezos, op.opHash);
 
       const result = await (contract as ContractAbstraction<ContractProvider>).contractViews.get_display().executeView({
         viewCaller: alice.pkh

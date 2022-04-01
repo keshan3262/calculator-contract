@@ -8,7 +8,6 @@ type memory_arg_value_t is
 | Memory_display      of unit
 | Memory_keyboard     of int
 
-(* Two entrypoints with same arg of union type cannot be added *)
 type memory_arg_t       is [@layout:comb] record [
   value                   : memory_arg_value_t;
   r                       : unit;

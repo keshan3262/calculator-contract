@@ -2,6 +2,7 @@ import { ContractAbstraction, ContractProvider, TransferParams, UnitValue } from
 import { rejects, strictEqual } from "assert";
 import BigNumber from "bignumber.js";
 
+import { confirmOperation } from "../utils/confirmation";
 import { Tezos } from "./utils/cli";
 
 interface MathOperationArgumentBase {
@@ -94,7 +95,7 @@ const genericOperationTestcase = async (
   let result: OperationResult = '0';
   try {
     const op = await batch.send();
-    await op.confirmation();
+    await confirmOperation(tezos, op.opHash);
     const storage = await contract.storage<any>();
     result = successResultFn(storage);
   } catch (e) {

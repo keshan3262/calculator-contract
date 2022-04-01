@@ -1,10 +1,11 @@
-import { Tezos, signerAlice } from "./utils/cli";
-import { migrate } from "../scripts/helpers";
-import { initTezos } from "../utils/helpers";
-
 import { UnitValue } from "@taquito/taquito";
 import { strictEqual } from "assert";
+
+import { migrate } from "../scripts/helpers";
+import { initTezos } from "../utils/helpers";
 import { memOperationTestcase, nonOwnerTestcase } from "./helpers";
+import { Tezos, signerAlice } from "./utils/cli";
+import { confirmOperation } from "../utils/confirmation";
 
 describe("Calculator other entrypoints test", function () {
   let aliceContract;
@@ -33,7 +34,7 @@ describe("Calculator other entrypoints test", function () {
   describe("Testing entrypoint: Set_display", function () {
     it("Should set display_value to the specified one", async () => {
       const op = await aliceContract.methods.set_display(4).send();
-      await op.confirmation();
+      await confirmOperation(Tezos, op.hash);
       const storage = await aliceContract.storage();
       strictEqual(storage.display_value.toNumber(), 4);
     });
