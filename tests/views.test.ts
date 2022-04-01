@@ -1,29 +1,26 @@
 import { Tezos, signerAlice } from "./utils/cli";
 import { migrate } from "../scripts/helpers";
 
-import { ContractAbstraction, ContractProvider } from "@taquito/taquito";
 import { strictEqual } from "assert";
-import { getSettingInitialValuesTransfersParams } from "./helpers";
-import { alice } from "../scripts/sandbox/accounts";
-import { confirmOperation } from "../utils/confirmation";
+import { getSettingInitialValuesMethods } from "./helpers";
+import { Calculator } from "./calculator";
+import initialStorage from "./storage/storage";
 
 describe("Calculator views test", function () {
-  let contract;
-  let chainId;
+  let calculator: Calculator;
 
   beforeAll(async () => {
     try {
       Tezos.setSignerProvider(signerAlice);
-      const storage = require("./storage/storage");
 
       const deployedContract = await migrate(
         Tezos,
         "calculator",
-        storage,
+        initialStorage,
         "sandbox"
       );
-      contract = await Tezos.contract.at(deployedContract);
-      chainId = await Tezos.rpc.getChainId();
+
+      calculator = await Calculator.init("alice", deployedContract);
     } catch (e) {
       console.log(e);
     }
@@ -31,15 +28,9 @@ describe("Calculator views test", function () {
 
   describe("Testing view: Get_display", function () {
     it("Should return display_value", async () => {
-      let batch = Tezos.wallet.batch();
-      getSettingInitialValuesTransfersParams(contract, 1, 2)
-        .forEach(transferParams => batch = batch.withTransfer(transferParams));
-      const op = await batch.send();
-      await confirmOperation(Tezos, op.opHash);
+      await calculator.sendBatch(getSettingInitialValuesMethods(calculator, 1, 2));
 
-      const result = await (contract as ContractAbstraction<ContractProvider>).contractViews.get_display().executeView({
-        viewCaller: alice.pkh
-      });
+      const result = await calculator.getDisplay();
       strictEqual(result.toNumber(), 1);
     });
   });

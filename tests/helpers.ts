@@ -1,28 +1,16 @@
-import { ContractAbstraction, ContractProvider, TransferParams, UnitValue } from "@taquito/taquito";
+import { ContractMethod, ContractProvider, UnitValue } from "@taquito/taquito";
 import { rejects, strictEqual } from "assert";
 import BigNumber from "bignumber.js";
 
-import { confirmOperation } from "../utils/confirmation";
-import { Tezos } from "./utils/cli";
-
-interface MathOperationArgumentBase {
-  type: "keyboard" | "display" | "memory";
-}
-
-interface KeyboardValue extends MathOperationArgumentBase {
-  type: "keyboard";
-  value: BigNumber.Value;
-}
-
-interface DisplayValue extends MathOperationArgumentBase {
-  type: "display";
-}
-
-interface MemoryValue extends MathOperationArgumentBase {
-  type: "memory";
-}
-
-type MathOperationArgument = KeyboardValue | DisplayValue | MemoryValue;
+import {
+  AssignResultMemoryMethodName,
+  BinaryOperatorMethodName,
+  Calculator,
+  MathOperationArgument,
+  MemoryArgumentValue,
+  ResetMemoryMethodName,
+  UnaryOperatorMethodName
+} from "./calculator";
 
 type OperationResult = BigNumber.Value | { error: string };
 
@@ -49,55 +37,48 @@ const assertResultMatch = (expected: OperationResult, received: OperationResult)
   }
 };
 
-export const getSettingInitialValuesTransfersParams = (
-  contract: ContractAbstraction<ContractProvider>,
+export const getSettingInitialValuesMethods = (
+  calculator: Calculator,
   initialDisplayValue?: BigNumber.Value,
   initialMemValue?: BigNumber.Value
 ) => {
-  const result: TransferParams[] = [];
+  const result: ContractMethod<ContractProvider>[] = [];
 
   if (initialDisplayValue !== undefined) {
-    result.push(contract.methods.set_display(initialDisplayValue).toTransferParams());
+    result.push(calculator.setDisplay(initialDisplayValue));
   }
   if (initialMemValue !== undefined) {
     result.push(
-      contract.methods.reset_memory().toTransferParams(),
-      contract.methods.add_memory("memory_keyboard", initialMemValue).toTransferParams()
+      calculator.resetMemory(),
+      calculator.addMemory({ type: "memory_keyboard", value: initialMemValue })
     );
   }
 
   return result;
 };
 
-export const nonOwnerTestcase = async (
-  contract: ContractAbstraction<ContractProvider>,
-  methodName: string,
-  args: any[]
-) => rejects(
-  () => contract.methods[methodName](...args).send(),
+export const nonOwnerTestcase = async (method: ContractMethod<ContractProvider>) => rejects(
+  () => method.send(),
   (e: Error) => e.message === "Calculator/not-owner"
 );
 
 const genericOperationTestcase = async (
-  contract: ContractAbstraction<ContractProvider>,
-  methodName: string,
-  args: any[],
+  calculator: Calculator,
+  method: ContractMethod<ContractProvider>,
   expectedResult: OperationResult,
   successResultFn: (storage: any) => BigNumber.Value,
-  tezos = Tezos,
   initialDisplayValue?: BigNumber.Value,
   initialMemValue?: BigNumber.Value
 ) => {
-  let batch = tezos.wallet.batch();
-  getSettingInitialValuesTransfersParams(contract, initialDisplayValue, initialMemValue)
-    .forEach(transferParams => batch = batch.withTransfer(transferParams));
-  batch = batch.withTransfer(contract.methods[methodName](...args).toTransferParams());
   let result: OperationResult = '0';
   try {
-    const op = await batch.send();
-    await confirmOperation(tezos, op.opHash);
-    const storage = await contract.storage<any>();
-    result = successResultFn(storage);
+    const presetMethods = getSettingInitialValuesMethods(calculator, initialDisplayValue, initialMemValue);
+    await calculator.sendBatch([
+      ...presetMethods,
+      method
+    ]);
+    await calculator.updateStorage();
+    result = successResultFn(calculator.storage);
   } catch (e) {
     result = { error: e.message };
   }
@@ -105,49 +86,41 @@ const genericOperationTestcase = async (
 };
 
 export const nonOwnerMathOperatorTestcase = (
-  contract: ContractAbstraction<ContractProvider>,
-  methodName: string,
-  args: MathOperationArgument[]
+  calculator: Calculator,
+  methodName: BinaryOperatorMethodName | UnaryOperatorMethodName,
+  ...args: MathOperationArgument[]
 ) => nonOwnerTestcase(
-  contract,
-  methodName,
-  args.map(arg => [arg.type, arg.type === "keyboard" ? arg.value : UnitValue]).flat()
+  methodName === "writeSqrt" ? calculator.writeSqrt(args[0]) : calculator[methodName](args[0], args[1]),
 );
 
 export const mathOperatorTestcase = async (
-  contract: ContractAbstraction<ContractProvider>,
-  methodName: string,
+  calculator: Calculator,
+  methodName: BinaryOperatorMethodName | UnaryOperatorMethodName,
   args: MathOperationArgument[],
   expectedResult: OperationResult,
-  tezos = Tezos,
   initialDisplayValue?: BigNumber.Value,
   initialMemValue?: BigNumber.Value
 ) => genericOperationTestcase(
-  contract,
-  methodName,
-  args.map(arg => [arg.type, arg.type === "keyboard" ? arg.value : UnitValue]).flat(),
+  calculator,
+  methodName === "writeSqrt" ? calculator.writeSqrt(args[0]) : calculator[methodName](args[0], args[1]),
   expectedResult,
   storage => storage.display_value,
-  tezos,
   initialDisplayValue,
   initialMemValue
 );
 
 export const memOperationTestcase = async (
-  contract: ContractAbstraction<ContractProvider>,
-  methodName: string,
-  args: any[],
+  calculator: Calculator,
+  methodName: AssignResultMemoryMethodName | ResetMemoryMethodName,
+  args: MemoryArgumentValue[],
   expectedResult: OperationResult,
   initialMemValue: BigNumber.Value,
   initialDisplayValue?: BigNumber.Value,
-  tezos = Tezos
 ) => genericOperationTestcase(
-  contract,
-  methodName,
-  args,
+  calculator,
+  methodName === "resetMemory" ? calculator.resetMemory() : calculator[methodName](args[0]),
   expectedResult,
   storage => storage.memory_value,
-  tezos,
   initialDisplayValue,
   initialMemValue
 );

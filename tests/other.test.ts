@@ -1,31 +1,28 @@
-import { UnitValue } from "@taquito/taquito";
 import { strictEqual } from "assert";
 
 import { migrate } from "../scripts/helpers";
-import { initTezos } from "../utils/helpers";
 import { memOperationTestcase, nonOwnerTestcase } from "./helpers";
 import { Tezos, signerAlice } from "./utils/cli";
-import { confirmOperation } from "../utils/confirmation";
+import { Calculator } from "./calculator";
+import initialStorage from "./storage/storage";
 
 describe("Calculator other entrypoints test", function () {
-  let aliceContract;
-  let bobContract;
-  let bobTezos;
+  let aliceCalculator: Calculator;
+  let bobCalculator: Calculator;
 
   beforeAll(async () => {
     try {
-      bobTezos = await initTezos("bob");
       Tezos.setSignerProvider(signerAlice);
-      const storage = require("./storage/storage");
 
       const deployedContract = await migrate(
         Tezos,
         "calculator",
-        storage,
+        initialStorage,
         "sandbox"
       );
-      aliceContract = await Tezos.contract.at(deployedContract);
-      bobContract = await bobTezos.contract.at(deployedContract);
+
+      aliceCalculator = await Calculator.init("alice", deployedContract);
+      bobCalculator = await Calculator.init("bob", deployedContract);
     } catch (e) {
       console.log(e);
     }
@@ -33,15 +30,14 @@ describe("Calculator other entrypoints test", function () {
 
   describe("Testing entrypoint: Set_display", function () {
     it("Should set display_value to the specified one", async () => {
-      const op = await aliceContract.methods.set_display(4).send();
-      await confirmOperation(Tezos, op.hash);
-      const storage = await aliceContract.storage();
-      strictEqual(storage.display_value.toNumber(), 4);
+      await aliceCalculator.sendSingle(aliceCalculator.setDisplay(4));
+      await aliceCalculator.updateStorage();
+      strictEqual(aliceCalculator.storage.display_value.toNumber(), 4);
     });
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "set_display", [4])
+      async () => nonOwnerTestcase(bobCalculator.setDisplay(4))
     );
   });
 
@@ -49,9 +45,9 @@ describe("Calculator other entrypoints test", function () {
     it(
       "Should increase memory_value by 'memory_keyboard' value",
       async () => memOperationTestcase(
-        aliceContract,
-        "add_memory",
-        ["memory_keyboard", 4],
+        aliceCalculator,
+        "addMemory",
+        [{ type: "memory_keyboard", value: 4 }],
         9,
         5
       )
@@ -60,9 +56,9 @@ describe("Calculator other entrypoints test", function () {
     it(
       "Should increase memory_value by 'display' value",
       async () => memOperationTestcase(
-        aliceContract,
-        "add_memory",
-        ["memory_display", UnitValue],
+        aliceCalculator,
+        "addMemory",
+        [{ type: "memory_display" }],
         12,
         9,
         3
@@ -71,7 +67,7 @@ describe("Calculator other entrypoints test", function () {
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "add_memory", ["memory_keyboard", 4])
+      async () => nonOwnerTestcase(bobCalculator.addMemory({ type: "memory_keyboard", value: 4 }))
     );
   });
 
@@ -79,9 +75,9 @@ describe("Calculator other entrypoints test", function () {
     it(
       "Should decrease memory_value by 'memory_keyboard' value",
       async () => memOperationTestcase(
-        aliceContract,
-        "negate_memory",
-        ["memory_keyboard", 4],
+        aliceCalculator,
+        "negateMemory",
+        [{ type: "memory_keyboard", value: 4 }],
         1,
         5
       )
@@ -90,9 +86,9 @@ describe("Calculator other entrypoints test", function () {
     it(
       "Should decrease memory_value by 'display' value",
       async () => memOperationTestcase(
-        aliceContract,
-        "negate_memory",
-        ["memory_display"],
+        aliceCalculator,
+        "negateMemory",
+        [{ type: "memory_display" }],
         6,
         9,
         3
@@ -101,19 +97,19 @@ describe("Calculator other entrypoints test", function () {
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "negate_memory", ["memory_keyboard", 4])
+      async () => nonOwnerTestcase(bobCalculator.negateMemory({ type: "memory_keyboard", value: 4 }))
     );
   });
 
   describe("Testing entrypoint: Reset_memory", () => {
     it(
       "Should reset memory_value to zero",
-      async () => memOperationTestcase(aliceContract, "reset_memory", [], 0, 7)
+      async () => memOperationTestcase(aliceCalculator, "resetMemory", [], 0, 7)
     );
 
     it(
       "Should throw 'not-owner' error if a non-owner tries to call the entrypoint",
-      async () => nonOwnerTestcase(bobContract, "reset_memory", [UnitValue])
+      async () => nonOwnerTestcase(bobCalculator.resetMemory())
     );
   });
 });
