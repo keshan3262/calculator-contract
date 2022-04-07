@@ -14,7 +14,7 @@ function main(
   const action          : parameter_t;
   const s               : storage_t)
                         : return_t is
-  case action of
+  case action of [
   | Add(params)           -> add(params, s)
   | Negate(params)        -> negate(params, s)
   | Multiply(params)      -> multiply(params, s)
@@ -24,4 +24,4 @@ function main(
   | Add_memory(params)    -> add_memory(params, s)
   | Negate_memory(params) -> negate_memory(params, s)
   | Reset_memory(_)       -> reset_memory(s)
-  end
+  ]

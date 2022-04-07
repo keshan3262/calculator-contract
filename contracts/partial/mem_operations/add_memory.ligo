@@ -7,10 +7,9 @@ function add_memory(
                         : return_t is
   block {
     assert_owner(s.owner);
-    const toofta1 = params.value;
-    const operand : int = case toofta1 of
+    const operand : int = case params.value of [
     | Memory_display(_)      -> s.display_value
     | Memory_keyboard(value) -> value
-    end;
+    ];
     s.memory_value := s.memory_value + operand;
   } with (no_operations, s)
